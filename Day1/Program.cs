@@ -36,6 +36,7 @@ namespace Day1
             Location temp = new Location();
             int dir = (int)directions.north;
             List<Location> locations = new List<Location>();
+            bool found = false;
             foreach(String step in steps)
             {
                 turn = step.Trim()[0];
@@ -54,65 +55,81 @@ namespace Day1
                 {
                     case directions.north:
                         y += blocks;
-                        for (int i = loc.y+1; i <= y; i++)
+                        if (!found)
                         {
-                            temp.x = x;
-                            temp.y = i;
-                            if (locations.Contains(temp))
+                            for (int i = loc.y + 1; i <= y; i++)
                             {
-                                Console.WriteLine("Already visited " + x + "," + i + " (" + (Math.Abs(x) + Math.Abs(i)) + " blocks away)");
-                            }
-                            else
-                            {
-                                locations.Add(temp);
+                                temp.x = x;
+                                temp.y = i;
+                                if (locations.Contains(temp))
+                                {
+                                    Console.WriteLine("Already visited " + x + "," + i + " (" + (Math.Abs(x) + Math.Abs(i)) + " blocks away)");
+                                    found = true;
+                                }
+                                else
+                                {
+                                    locations.Add(temp);
+                                }
                             }
                         }
                         break;
                     case directions.south:
                         y -= blocks;
-                        for (int i = loc.y-1; i >= y; i--)
+                        if (!found)
                         {
-                            temp.x = x;
-                            temp.y = i;
-                            if (locations.Contains(temp))
+                            for (int i = loc.y - 1; i >= y; i--)
                             {
-                                Console.WriteLine("Already visited " + x + "," + i + " (" + (Math.Abs(x) + Math.Abs(i)) + " blocks away)");
-                            }
-                            else
-                            {
-                                locations.Add(temp);
+                                temp.x = x;
+                                temp.y = i;
+                                if (locations.Contains(temp))
+                                {
+                                    Console.WriteLine("Already visited " + x + "," + i + " (" + (Math.Abs(x) + Math.Abs(i)) + " blocks away)");
+                                    found = true;
+                                }
+                                else
+                                {
+                                    locations.Add(temp);
+                                }
                             }
                         }
                         break;
                     case directions.east:
                         x += blocks;
-                        for (int i = loc.x+1; i <= x; i++)
+                        if (!found)
                         {
-                            temp.x = i;
-                            temp.y = y;
-                            if (locations.Contains(temp))
+                            for (int i = loc.x + 1; i <= x; i++)
                             {
-                                Console.WriteLine("Already visited " + i + "," + y + " (" + (Math.Abs(i) + Math.Abs(y)) + " blocks away)");
-                            }
-                            else
-                            {
-                                locations.Add(temp);
+                                temp.x = i;
+                                temp.y = y;
+                                if (locations.Contains(temp))
+                                {
+                                    Console.WriteLine("Already visited " + i + "," + y + " (" + (Math.Abs(i) + Math.Abs(y)) + " blocks away)");
+                                    found = true;
+                                }
+                                else
+                                {
+                                    locations.Add(temp);
+                                }
                             }
                         }
                         break;
                     case directions.west:
                         x -= blocks;
-                        for (int i = loc.x-1; i >= x; i--)
+                        if (!found)
                         {
-                            temp.x = i;
-                            temp.y = y;
-                            if (locations.Contains(temp))
+                            for (int i = loc.x - 1; i >= x; i--)
                             {
-                                Console.WriteLine("Already visited " + i + "," + y + " (" + (Math.Abs(i) + Math.Abs(y)) + " blocks away)");
-                            }
-                            else
-                            {
-                                locations.Add(temp);
+                                temp.x = i;
+                                temp.y = y;
+                                if (locations.Contains(temp))
+                                {
+                                    Console.WriteLine("Already visited " + i + "," + y + " (" + (Math.Abs(i) + Math.Abs(y)) + " blocks away)");
+                                    found = true;
+                                }
+                                else
+                                {
+                                    locations.Add(temp);
+                                }
                             }
                         }
                         break;
