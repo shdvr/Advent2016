@@ -8,141 +8,135 @@ namespace Day1
 {
     class Program
     {
-
-        public enum directions : int 
-        {
-            north=0, east=1, south=2 , west=3
-        }
+        public enum Directions : int { North = 0, East = 1, South = 2, West = 3 }
 
         public struct Location
         {
-            public int x;
-            public int y;
+            public int lon;
+            public int lat;
         }
         static void Main(string[] args)
         {
             String[] steps;
-            System.IO.StreamReader sr = new System.IO.StreamReader("input.txt");
-            steps = sr.ReadToEnd().Split(',');
-            sr.Close();
-            char turn;
-            int blocks;
-          
-            int x = 0;
-            int y = 0;
-            Location loc = new Location();
-            loc.x = x;
-            loc.y = y;
-            Location temp = new Location();
-            int dir = (int)directions.north;
-            List<Location> locations = new List<Location>();
-            bool found = false;
-            foreach(String step in steps)
+            using (System.IO.StreamReader sr = new System.IO.StreamReader("input.txt"))
             {
-                turn = step.Trim()[0];
-                blocks = Int32.Parse(step.Trim().Remove(0, 1));
-                if (turn.Equals('L'))
+                steps = sr.ReadToEnd().Split(',');
+            }
+
+            int currentLong = 0;
+            int currentLat = 0;
+            long totalWalk = 0;
+            bool reVisited = false;
+            Location loc = new Location()
+            {
+                lon = currentLong,
+                lat = currentLat
+            };
+            Location firstRevisit = loc;
+            int myDirection = (int)Directions.North;
+            List<Location> visited = new List<Location>();
+            int blocksToWalk;
+            Location temp;
+
+            foreach (String step in steps)
+            {
+                blocksToWalk = Int32.Parse(step.Trim().Remove(0, 1));
+                totalWalk += blocksToWalk;
+                myDirection += (step.Trim()[0].Equals('R') ? 1 : -1);
+                if (myDirection < 0) { myDirection += 4; }
+                if (myDirection > 3) { myDirection -= 4; }
+                switch ((Directions)myDirection)
                 {
-                    dir--;
-                }
-                else
-                {
-                    dir++;
-                }
-                if (dir < 0) { dir += 4; }
-                if (dir > 3) { dir -= 4; }
-                switch ((directions)dir)
-                {
-                    case directions.north:
-                        y += blocks;
-                        if (!found)
+                    case Directions.North:
+                        currentLat += blocksToWalk;
+                        if (!reVisited)
                         {
-                            for (int i = loc.y + 1; i <= y; i++)
+                            for (int i = loc.lat + 1; i <= currentLat; i++)
                             {
-                                temp.x = x;
-                                temp.y = i;
-                                if (locations.Contains(temp))
+                                temp.lon = currentLong;
+                                temp.lat = i;
+                                if (visited.Contains(temp))
                                 {
-                                    Console.WriteLine("Already visited " + x + "," + i + " (" + (Math.Abs(x) + Math.Abs(i)) + " blocks away)");
-                                    found = true;
+                                    firstRevisit = temp;
+                                    reVisited = true;
                                 }
                                 else
                                 {
-                                    locations.Add(temp);
+                                    visited.Add(temp);
                                 }
                             }
                         }
                         break;
-                    case directions.south:
-                        y -= blocks;
-                        if (!found)
+                    case Directions.South:
+                        currentLat -= blocksToWalk;
+                        if (!reVisited)
                         {
-                            for (int i = loc.y - 1; i >= y; i--)
+                            for (int i = loc.lat - 1; i >= currentLat; i--)
                             {
-                                temp.x = x;
-                                temp.y = i;
-                                if (locations.Contains(temp))
+                                temp.lon = currentLong;
+                                temp.lat = i;
+                                if (visited.Contains(temp))
                                 {
-                                    Console.WriteLine("Already visited " + x + "," + i + " (" + (Math.Abs(x) + Math.Abs(i)) + " blocks away)");
-                                    found = true;
+                                    firstRevisit = temp;
+                                    reVisited = true;
                                 }
                                 else
                                 {
-                                    locations.Add(temp);
+                                    visited.Add(temp);
                                 }
                             }
                         }
                         break;
-                    case directions.east:
-                        x += blocks;
-                        if (!found)
+                    case Directions.East:
+                        currentLong += blocksToWalk;
+                        if (!reVisited)
                         {
-                            for (int i = loc.x + 1; i <= x; i++)
+                            for (int i = loc.lon + 1; i <= currentLong; i++)
                             {
-                                temp.x = i;
-                                temp.y = y;
-                                if (locations.Contains(temp))
+                                temp.lon = i;
+                                temp.lat = currentLat;
+                                if (visited.Contains(temp))
                                 {
-                                    Console.WriteLine("Already visited " + i + "," + y + " (" + (Math.Abs(i) + Math.Abs(y)) + " blocks away)");
-                                    found = true;
+                                    firstRevisit = temp;
+                                    reVisited = true;
                                 }
                                 else
                                 {
-                                    locations.Add(temp);
+                                    visited.Add(temp);
                                 }
                             }
                         }
                         break;
-                    case directions.west:
-                        x -= blocks;
-                        if (!found)
+                    case Directions.West:
+                        currentLong -= blocksToWalk;
+                        if (!reVisited)
                         {
-                            for (int i = loc.x - 1; i >= x; i--)
+                            for (int i = loc.lon - 1; i >= currentLong; i--)
                             {
-                                temp.x = i;
-                                temp.y = y;
-                                if (locations.Contains(temp))
+                                temp.lon = i;
+                                temp.lat = currentLat;
+                                if (visited.Contains(temp))
                                 {
-                                    Console.WriteLine("Already visited " + i + "," + y + " (" + (Math.Abs(i) + Math.Abs(y)) + " blocks away)");
-                                    found = true;
+                                    firstRevisit = temp;
+                                    reVisited = true;
                                 }
                                 else
                                 {
-                                    locations.Add(temp);
+                                    visited.Add(temp);
                                 }
                             }
                         }
                         break;
                     default:
-                        Console.WriteLine("Invalid direction: " + dir);
+                        Console.WriteLine("Invalid direction: " + myDirection);
                         break;
                 }
-            
-                loc.x = x;
-                loc.y = y;
-               
+                loc.lon = currentLong;
+                loc.lat = currentLat;
             }
-            Console.WriteLine("Distance: " + (Math.Abs(x)+Math.Abs(y)) + " blocks");
+            Console.WriteLine("Distance from starting point: " + (Math.Abs(currentLong) + Math.Abs(currentLat)) + " blocks");
+            Console.WriteLine("Walked a total of " + totalWalk + " blocks");
+            if (reVisited) Console.WriteLine("First revisited a location at " + firstRevisit.lon + "," + firstRevisit.lat + " (" + (Math.Abs(firstRevisit.lon) + Math.Abs(firstRevisit.lat)) + " blocks away)");
             Console.ReadLine();
         }
     }
