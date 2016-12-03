@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Day1
 {
-    class Program
+    class CityWalk
     {
         public enum Directions : int { North = 0, East = 1, South = 2, West = 3 }
 
@@ -18,7 +15,7 @@ namespace Day1
         static void Main(string[] args)
         {
             String[] steps;
-            using (System.IO.StreamReader sr = new System.IO.StreamReader("input.txt"))
+            using (System.IO.StreamReader sr = new System.IO.StreamReader("inputDay1.txt"))
             {
                 steps = sr.ReadToEnd().Split(',');
             }
